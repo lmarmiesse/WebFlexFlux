@@ -6,8 +6,19 @@
   </servlet>
   
   <servlet>
-    <servlet-name>Run</servlet-name>
-    <servlet-class>servlets.Run</servlet-class>
+    <servlet-name>ChooseParameters</servlet-name>
+    <servlet-class>servlets.ChooseParameters</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>RunAnalysis</servlet-name>
+    <servlet-class>servlets.RunAnalysis</servlet-class>
+    <multipart-config>
+      <location>/tmp</location>
+      <max-file-size>52428800</max-file-size>
+      <max-request-size>209715200</max-request-size>
+      <file-size-threshold>1048576</file-size-threshold>
+    </multipart-config>
   </servlet>
   
   <servlet>
@@ -15,16 +26,20 @@
     <servlet-class>startup.StartupServlet</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
-  
-  
-  
+ 
+ 
+ 
+ 
   <servlet-mapping>
     <servlet-name>AnalysisChoice</servlet-name>
     <url-pattern>/methods</url-pattern>
   </servlet-mapping>
-  
   <servlet-mapping>
-    <servlet-name>Run</servlet-name>
-    <url-pattern>/run</url-pattern>
+    <servlet-name>ChooseParameters</servlet-name>
+    <url-pattern>/parameters</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>RunAnalysis</servlet-name>
+    <url-pattern>/running</url-pattern>
   </servlet-mapping>
 </web-app>

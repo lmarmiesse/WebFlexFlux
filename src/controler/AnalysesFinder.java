@@ -3,24 +3,22 @@ package controler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import flexflux.applications.FlexfluxTest;
 import flexflux.applications.gui.GraphicalFlexflux;
 
 public class AnalysesFinder {
 
-	private static List<String> analysesNames = new ArrayList<String>();
+	private static Set<String> analysesNames = new HashSet<String>();
 	private static List<Class<?>> analysesClasses = new ArrayList<Class<?>>();
 	private static Map<String,Class<?>> analysesNamesToClasses = new HashMap<String,Class<?>>();
 
-	public static List<String> getAnalysesNames() {
+	public static Set<String> getAnalysesNames() {
 		return analysesNames;
-	}
-
-	public static void setAnalysesNames(List<String> analysesNames) {
-		AnalysesFinder.analysesNames = analysesNames;
 	}
 
 	public static void findAnalyses() {

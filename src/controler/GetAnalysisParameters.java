@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.kohsuke.args4j.Option;
 
 import flexflux.applications.FlexfluxTest;
@@ -18,6 +19,13 @@ public class GetAnalysisParameters {
 
 	private List<FormComponent> requiredArguments = new ArrayList<FormComponent>();
 	private List<FormComponent> optionalArguments = new ArrayList<FormComponent>();
+	private List<String> outputFilesArguments = new ArrayList<String>();
+
+	public String getOutputFilesArguments() {
+		
+		return StringUtils.join(outputFilesArguments.toArray(),",");
+		
+	}
 
 	private String analysisName;
 	private String description;
@@ -30,7 +38,7 @@ public class GetAnalysisParameters {
 		Class<?> analysisClass = AnalysesFinder.getAnalysesNamesToClasses().get(analysisName);
 
 		for (Field f : analysisClass.getDeclaredFields()) {
-			
+
 			if (f.getName().equals("message")) {
 
 				try {
@@ -44,7 +52,7 @@ public class GetAnalysisParameters {
 			}
 
 			for (Annotation a : f.getDeclaredAnnotations()) {
-				
+
 				if (a instanceof Option) {
 
 					Option option = (Option) a;
@@ -58,24 +66,26 @@ public class GetAnalysisParameters {
 						e.printStackTrace();
 					}
 
-					FormComponent component = getRightFormComponent(option.metaVar(), option.name(), defaultVal,option.usage());
+					FormComponent component = getRightFormComponent(option.metaVar(), option.name(), defaultVal,
+							option.usage());
 
-					if (!f.getType().getName().equals("boolean")) {
-						
-						if (option.required()) {
-							requiredArguments.add(0, component);
+					if (component != null) {
+						if (!f.getType().getName().equals("boolean")) {
+
+							if (option.required()) {
+								requiredArguments.add(0, component);
+							} else {
+								optionalArguments.add(0, component);
+							}
 						} else {
-							optionalArguments.add(0, component);
-						}
-					} else {
-						
-						if (option.required()) {
-							requiredArguments.add(component);
-						} else {
-							optionalArguments.add(component);
+
+							if (option.required()) {
+								requiredArguments.add(component);
+							} else {
+								optionalArguments.add(component);
+							}
 						}
 					}
-
 				}
 			}
 
@@ -102,11 +112,14 @@ public class GetAnalysisParameters {
 	private FormComponent getRightFormComponent(String metaVar, String name, String defaultVal, String description) {
 
 		if (!metaVar.equals("")) {
-			if (metaVar.equals("File")) {
-				return new FileFormComponent(name,defaultVal,description);
+			if (metaVar.contains("File") && metaVar.contains("in")) {
+				return new FileFormComponent(name, defaultVal, description);
+			} else if (metaVar.contains("File") && metaVar.contains("out")) {
+				outputFilesArguments.add(name);
+				return null;
 			} else if (metaVar.equals("Solver")) {
 
-				SelectFormComponent c = new SelectFormComponent(name,defaultVal,description);
+				SelectFormComponent c = new SelectFormComponent(name, defaultVal, description);
 				for (String s : FlexfluxTest.okSolvers) {
 					c.addOption(s);
 				}
@@ -114,7 +127,7 @@ public class GetAnalysisParameters {
 				return c;
 			} else if (metaVar.startsWith("[") && metaVar.endsWith("]")) {
 
-				SelectFormComponent c = new SelectFormComponent(name,defaultVal,description);
+				SelectFormComponent c = new SelectFormComponent(name, defaultVal, description);
 				for (String s : ((String) metaVar.subSequence(1, metaVar.length() - 1)).split(",")) {
 					c.addOption(s);
 				}
@@ -124,12 +137,16 @@ public class GetAnalysisParameters {
 			}
 
 			else {
-				return new TextFormComponent(name,defaultVal,description);
+				return new TextFormComponent(name, defaultVal, description);
 			}
 		}
 
 		else {
-			return new BooleanFormComponent(name,defaultVal,description);
+			if (name.equals("-plot")) {
+				return null;
+			} else {
+				return new BooleanFormComponent(name, defaultVal, description);
+			}
 		}
 
 	}

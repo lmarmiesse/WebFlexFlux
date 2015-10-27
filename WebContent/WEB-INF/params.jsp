@@ -12,9 +12,11 @@
 
 <p><c:out value="${ AnalysisParameters.description }" /></p>
 
-<form method="post" action="run">
+<form method="post" action="running" enctype="multipart/form-data">
 
 <input type="hidden" name="method" value="<c:out value="${ AnalysisParameters.analysisName }" />">
+
+<input type="hidden" name="outputFiles" value="<c:out value="${ AnalysisParameters.outputFilesArguments }"/>"/>
 
 <c:forEach items="${ AnalysisParameters.requiredArguments }" var="argument">
     <c:out value="${ argument.HTMLstring } ${ argument.descr }" escapeXml="false"/><br/>
