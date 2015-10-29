@@ -4,28 +4,34 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>FlexFlux analyses</title>
+<title></title>
 
 <link href="css/bootstrap.css" rel="stylesheet">
 <script src="js/bootstrap.js"></script>
 <script src="js/jquery-1.11.3.min.js"></script>
 
 </head>
-<body style="background-color: #f5f5f5;">
+<body>
 	<%@ include file="navbar.jsp"%>
 
 	<div class="container" style="background-color: #ffffff;">
 
-		<ul>
-			<c:forEach items="${ analysesNames }" var="analysis">
-				<li><a
-					href="<c:url value="${'parameters?method='}${analysis}"/>"><c:out
-							value="${ analysis }" /></a></li>
-			</c:forEach>
-		</ul>
+		<p>Analysis over</p>
+
+
+		<c:forEach items="${ fileNames }" var="name">
+
+			<div class="row">
+
+				<a
+					href="<c:url value="${'files?method='}${analysisName}${'&nb='}${uniqueNumer}${'&file='}${name}"/>"><c:out
+						value="${ name }" /></a>
+
+			</div>
+		</c:forEach>
+
 
 	</div>
-
 </body>
 </html>
 

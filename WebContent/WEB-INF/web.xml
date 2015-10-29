@@ -4,12 +4,10 @@
     <servlet-name>AnalysisChoice</servlet-name>
     <servlet-class>servlets.AnalysisChoice</servlet-class>
   </servlet>
-  
   <servlet>
     <servlet-name>ChooseParameters</servlet-name>
     <servlet-class>servlets.ChooseParameters</servlet-class>
   </servlet>
-  
   <servlet>
     <servlet-name>RunAnalysis</servlet-name>
     <servlet-class>servlets.RunAnalysis</servlet-class>
@@ -22,14 +20,16 @@
   </servlet>
   
   <servlet>
+	<servlet-name>Download</servlet-name>
+	<servlet-class>servlets.Download</servlet-class>
+  </servlet>
+  
+  
+  <servlet>
     <servlet-name>StartupServlet</servlet-name>
     <servlet-class>startup.StartupServlet</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
- 
- 
- 
- 
   <servlet-mapping>
     <servlet-name>AnalysisChoice</servlet-name>
     <url-pattern>/methods</url-pattern>
@@ -38,8 +38,12 @@
     <servlet-name>ChooseParameters</servlet-name>
     <url-pattern>/parameters</url-pattern>
   </servlet-mapping>
-    <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>RunAnalysis</servlet-name>
     <url-pattern>/running</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+	<servlet-name>Download</servlet-name>
+	<url-pattern>/files</url-pattern>
   </servlet-mapping>
 </web-app>

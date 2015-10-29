@@ -9,7 +9,7 @@ public class FileFormComponent extends FormComponent{
 
 	public String getHTMLstring() {
 		
-		return "<label for='"+name+"'>"+name+" : </label> <input type='file' name='"+name+"'>";
+		return "<input type='file' name='"+name+"'>";
 
 	}
 

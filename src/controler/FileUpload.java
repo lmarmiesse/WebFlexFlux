@@ -49,9 +49,10 @@ public class FileUpload {
 		BufferedOutputStream sortie = null;
 		try {
 			entree = new BufferedInputStream(part.getInputStream(), SIZE_TAMPON);
-			System.out.println(chemin + nomFichier);
 			sortie = new BufferedOutputStream(new FileOutputStream(new File(chemin + nomFichier)), SIZE_TAMPON);
 
+			System.out.println(chemin + nomFichier);
+			
 			byte[] tampon = new byte[SIZE_TAMPON];
 			int longueur;
 			while ((longueur = entree.read(tampon)) > 0) {

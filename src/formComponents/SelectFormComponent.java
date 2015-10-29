@@ -13,7 +13,9 @@ public class SelectFormComponent extends FormComponent{
 
 	public String getHTMLstring() {
 		
-		String HTMLstring = "<label for='"+name+"'>"+name+" : </label> <select>"; 
+		//TODO implement default value
+		
+		String HTMLstring = "<select>"; 
 		
 		for (String opt: options){
 			HTMLstring+="<option value='"+opt+"'>"+opt+"</option>";

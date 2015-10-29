@@ -11,6 +11,10 @@ import flexflux.applications.FlexfluxTest;
 public class StartupServlet extends javax.servlet.http.HttpServlet {
 
 	private static AtomicInteger uniqueNumber = new AtomicInteger(0);
+	public static final String FILES_PATH = "/home/lmarmiesse/Documents/uploads/";
+//	public static final String FILES_PATH = "/home/files/";
+	
+
 
 	public static int getUniqueNumber() {
 		uniqueNumber.incrementAndGet();

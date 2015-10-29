@@ -16,7 +16,7 @@ public class BooleanFormComponent extends FormComponent {
 			checked = "checked";
 		}
 		
-		return "<label for='"+name+"'>"+name+" : </label> <input type='checkbox' name='"+name+"' "+checked+">";
+		return "<input type='checkbox' name='"+name+"' "+checked+">";
 	}
 
 }

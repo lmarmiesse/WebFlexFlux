@@ -8,7 +8,7 @@ public class TextFormComponent extends FormComponent {
 
 	public String getHTMLstring() {
 		
-		return "<label for='" + name + "'>" + name + " : </label> <input type='text' name='" + name + "' value='"+defaultVal+"'>";
+		return "<input type='text' name='" + name + "' value='"+defaultVal+"'>";
 	
 	}
 

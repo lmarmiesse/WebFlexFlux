@@ -12,6 +12,17 @@ public abstract class FormComponent {
 		this.descr = descr;
 	}
 
+	
+	public String getDefaultVal() {
+		return defaultVal;
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+
+
 	public String getDescr() {
 		return descr;
 	}
