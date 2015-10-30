@@ -1,7 +1,13 @@
 package servlets;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +54,7 @@ public class RunAnalysis extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		String FILES_PATH = StartupServlet.FILES_PATH;
 		String analysisName = request.getParameter("method");
 		int uniqueNumber = StartupServlet.getUniqueNumber();
@@ -88,40 +94,13 @@ public class RunAnalysis extends HttpServlet {
 		String[] agrsArray = new String[args.size()];
 		int i = 0;
 
-		String commandLine = "";
-
 		for (String s : args) {
-
-			commandLine += s + " ";
 
 			agrsArray[i] = s;
 			i++;
 		}
 
-		// System.out.println(commandLine);
 		Class<?> analysisClass = AnalysesFinder.getAnalysesNamesToClasses().get(analysisName);
-
-		// // Stop the flexflux application from calling system.exit
-		// SystemExitControl.forbidSystemExitCall();
-		// try {
-		// Method main = analysisClass.getMethod("main", String[].class);
-		//
-		// main.invoke(null, (Object) agrsArray);
-		//
-		// // FlexfluxFBA.main(args);
-		// } catch (NoSuchMethodException e) {
-		// e.printStackTrace();
-		// } catch (SecurityException e) {
-		// e.printStackTrace();
-		// } catch (IllegalAccessException e) {
-		// e.printStackTrace();
-		// } catch (IllegalArgumentException e) {
-		// e.printStackTrace();
-		// } catch (InvocationTargetException e) {
-		// System.out.println("Error in analysis");
-		// // e.printStackTrace();
-		// }
-		// SystemExitControl.enableSystemExitCall();
 
 		String jvm = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
 		String classpath = System.getProperty("java.class.path");
@@ -131,11 +110,12 @@ public class RunAnalysis extends HttpServlet {
 		command.add(jvm);
 		command.add("-Djava.library.path=" + libpath);
 		command.add("-cp");
-		classpath+=":"+getServletContext().getRealPath("/")+"/WEB-INF/lib/flexflux.jar";
+		classpath += ":" + getServletContext().getRealPath("/") + "/WEB-INF/lib/flexflux.jar";
 		command.add(classpath);
 		command.add(analysisClass.getName());
 		command.addAll(Arrays.asList(agrsArray));
-
+		command.add("-web");
+		
 		String[] commandArray = new String[command.size()];
 
 		int j = 0;
@@ -147,27 +127,45 @@ public class RunAnalysis extends HttpServlet {
 		ProcessBuilder builder = new ProcessBuilder(commandArray);
 		builder.redirectErrorStream(true);
 		p = builder.start();
+		
+		BufferedReader stdInput = new BufferedReader(new InputStreamReader(
+				p.getInputStream()));
 
+		//read function output
+		String logContent = "";
+		int line;
+		while ((line = stdInput.read()) != -1) {
+			logContent += (char)line;
+		}
 		try {
 			p.waitFor();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		logContent=logContent.replace(path, "");
+		
+		
 		File outputFolder = new File(outputPath);
 		File[] listOfFiles = outputFolder.listFiles();
 
-		
+		String htmlFilePath = outputPath + "out.txt.html";
+
 		List<String> fileNames = new ArrayList<String>();
-		
+
 		for (File f : listOfFiles) {
-			fileNames.add(f.getName());
+			if (!f.getAbsolutePath().equals(htmlFilePath)) {
+				fileNames.add(f.getName());
+			}
 		}
 
 		request.setAttribute("analysisName", analysisName);
 		request.setAttribute("uniqueNumer", uniqueNumber);
 		request.setAttribute("fileNames", fileNames);
+		request.setAttribute("log", logContent);
+
+		String html = readFile(htmlFilePath, Charset.forName("UTF-8"));
+		request.setAttribute("htmlData", html);
 
 		this.getServletContext().getRequestDispatcher("/WEB-INF/result.jsp").forward(request, response);
 
@@ -177,7 +175,7 @@ public class RunAnalysis extends HttpServlet {
 		File theDir = new File(path);
 		// if the directory does not exist, create it
 		if (!theDir.exists()) {
-//			System.out.println("creating directory: " + path);
+			// System.out.println("creating directory: " + path);
 			boolean result = false;
 			try {
 				theDir.mkdir();
@@ -186,10 +184,19 @@ public class RunAnalysis extends HttpServlet {
 				// handle it
 			}
 			if (result) {
-//				System.out.println("DIR created");
+				// System.out.println("DIR created");
 			}
 		}
-
 	}
 
+	static String readFile(String path, Charset encoding) throws IOException {
+
+		try {
+			byte[] encoded = Files.readAllBytes(Paths.get(path));
+			return new String(encoded, encoding);
+		} catch (NoSuchFileException e) {
+
+		}
+		return "";
+	}
 }

@@ -7,8 +7,8 @@
 <title>FlexFlux analyses</title>
 
 <link href="css/bootstrap.css" rel="stylesheet">
-<script src="js/bootstrap.js"></script>
 <script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
 
 </head>
 <body style="background-color: #f5f5f5;">

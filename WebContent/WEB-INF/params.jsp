@@ -1,5 +1,6 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,31 +9,28 @@
 
 
 <link href="css/bootstrap.css" rel="stylesheet">
-<script src="js/bootstrap.js"></script>
 <script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.js"></script>
 
 </head>
 <body style="background-color: #f5f5f5;">
-<%@ include file="navbar.jsp" %>
+	<%@ include file="navbar.jsp"%>
 
 	<div class="container" style="background-color: #ffffff;">
 
-		<div class="row">
-			<h1>
-				<c:out value="${ AnalysisParameters.analysisName }" />
-			</h1>
-		</div>
+		<h1>
+			<c:out value="${ AnalysisParameters.analysisName }" />
+		</h1>
 
-
-		<div class="row">
+		<p>
 			<c:out value="${ AnalysisParameters.description }" />
-		</div>
+		</p>
 
-			<h2>Arguments</h2>
 
-			<h3>Required arguments</h3>
 
-		<form method="post" action="running" enctype="multipart/form-data">
+
+
+		<form method="post" action="result" enctype="multipart/form-data">
 
 			<input type="hidden" name="method"
 				value="<c:out value="${ AnalysisParameters.analysisName }" />">
@@ -40,41 +38,56 @@
 			<input type="hidden" name="outputFiles"
 				value="<c:out value="${ AnalysisParameters.outputFilesArguments }"/>" />
 
-			<c:forEach items="${ AnalysisParameters.requiredArguments }"
-				var="argument">
+			<c:if
+				test="${fn:length(AnalysisParameters.requiredArguments) gt 0 || fn:length(AnalysisParameters.optionalArguments) gt 0}">
 
-				<div class="row">
-					<div class="col-md-1">
-						<c:out value="${ argument.name }" />
-					</div>
-					<div class="col-md-3">
-						<c:out value="${ argument.HTMLstring }" escapeXml="false" />
-					</div>
-					<div class="col-md-6">
-						<c:out value="${ argument.descr }" />
-					</div>
-				</div>
+				<h2>Arguments</h2>
+
+				<c:if test="${fn:length(AnalysisParameters.requiredArguments) gt 0}">
+
+					<h3>Required arguments</h3>
+
+					<c:forEach items="${ AnalysisParameters.requiredArguments }"
+						var="argument">
+
+						<div class="row">
+							<div class="col-md-2">
+								<c:out value="${ argument.name }" />
+							</div>
+							<div class="col-md-3">
+								<c:out value="${ argument.HTMLstring }" escapeXml="false" />
+							</div>
+							<div class="col-md-6">
+								<c:out value="${ argument.descr }" />
+							</div>
+						</div>
 
 
-			</c:forEach>
+					</c:forEach>
+				</c:if>
 
-			<hr>
-				<h3>Optinal arguments</h3>
 
-			<c:forEach items="${ AnalysisParameters.optionalArguments }"
-				var="argument">
-				<div class="row">
-					<div class="col-md-1">
-						<c:out value="${ argument.name }" />
-					</div>
-					<div class="col-md-3">
-						<c:out value="${ argument.HTMLstring }" escapeXml="false" />
-					</div>
-					<div class="col-md-6">
-						<c:out value="${ argument.descr }" />
-					</div>
-				</div>
-			</c:forEach>
+
+				<c:if test="${fn:length(AnalysisParameters.optionalArguments) gt 0}">
+					<hr>
+					<h3>Optinal arguments</h3>
+
+					<c:forEach items="${ AnalysisParameters.optionalArguments }"
+						var="argument">
+						<div class="row">
+							<div class="col-md-2">
+								<c:out value="${ argument.name }" />
+							</div>
+							<div class="col-md-3">
+								<c:out value="${ argument.HTMLstring }" escapeXml="false" />
+							</div>
+							<div class="col-md-6">
+								<c:out value="${ argument.descr }" />
+							</div>
+						</div>
+					</c:forEach>
+				</c:if>
+			</c:if>
 
 			<input type="submit" />
 
