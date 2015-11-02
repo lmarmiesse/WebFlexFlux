@@ -45,9 +45,10 @@
 			<c:out value="${htmlData}" escapeXml="false" />
 		</c:if>
 		
-		<h2>Function output:</h2>
-		<pre id="log"><c:out value="${log}" escapeXml="false" /></pre>
-
+		<c:if test="${log != ''}">
+			<h2>Function output:</h2>
+			<pre id="log"><c:out value="${log}" escapeXml="false" /></pre>
+		</c:if>
 
 
 	</div>

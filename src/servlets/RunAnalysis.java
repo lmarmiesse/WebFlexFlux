@@ -109,6 +109,7 @@ public class RunAnalysis extends HttpServlet {
 		List<String> command = new ArrayList<String>();
 		command.add(jvm);
 		command.add("-Djava.library.path=" + libpath);
+		command.add("-Dlog4j.configuration=file://" + getServletContext().getRealPath("/") + "/WEB-INF/log4j.properties");
 		command.add("-cp");
 		classpath += ":" + getServletContext().getRealPath("/") + "/WEB-INF/lib/flexflux.jar";
 		command.add(classpath);

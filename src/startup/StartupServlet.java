@@ -28,7 +28,8 @@ public class StartupServlet extends javax.servlet.http.HttpServlet {
 
 	public void init(ServletConfig config) throws ServletException {
 		System.out.println("Yo !");
-
+		System.err.println("Upload files path ="+FILES_PATH);
+		
 		FlexfluxTest.doUnitTests = false;
 		AnalysesFinder.findAnalyses();
 	}
