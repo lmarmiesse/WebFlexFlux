@@ -6,3 +6,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+
+.normal_pre {
+  background-color: transparent;
+  border: 0px solid #ccc;
+
+}

@@ -31,6 +31,7 @@ public class AnalysisChoice extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		request.setAttribute("analysesDescriptions", AnalysesFinder.getAnalysesNamesToDescirptions());
 		request.setAttribute("analysesNames", AnalysesFinder.getAnalysesNames());
 		
 		this.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);

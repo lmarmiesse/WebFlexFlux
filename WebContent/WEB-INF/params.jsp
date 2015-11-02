@@ -9,6 +9,7 @@
 
 
 <link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/webFF.css" rel="stylesheet">
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -22,13 +23,7 @@
 			<c:out value="${ AnalysisParameters.analysisName }" />
 		</h1>
 
-		<p>
-			<c:out value="${ AnalysisParameters.description }" />
-		</p>
-
-
-
-
+		<pre class="normal_pre"><c:out value="${ AnalysisParameters.description }" /></pre>
 
 		<form method="post" action="result" enctype="multipart/form-data">
 
