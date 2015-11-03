@@ -12,6 +12,7 @@
 <link href="css/webFF.css" rel="stylesheet">
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap.js"></script>
+<script src="js/params.js"></script>
 
 </head>
 <body style="background-color: #f5f5f5;">
@@ -25,12 +26,34 @@
 
 		<pre class="normal_pre"><c:out value="${ AnalysisParameters.description }" /></pre>
 
+
+		<div class="row" id="outputDiv" hidden>
+
+			<h1>The analysis is running ... </h1>
+			<p>When it is over, you will be redirected to the results page.</p>
+
+			<h2>Output:</h2>
+
+			<button type="submit" class="btn btn-danger" id="cancel-btn"
+				onclick="cancelAnalysis()">Cancel analysis</button>
+
+			<br/>
+
+			<pre id="outputPre" class="function-output"></pre>
+
+		</div>
+
 		<form method="post" action="result" enctype="multipart/form-data">
 
 			<input type="hidden" name="method"
 				value="<c:out value="${ AnalysisParameters.analysisName }" />">
+				
+			<input type="hidden" name="key"
+				value="<c:out value="${ key }" />">
 
-			<input type="hidden" name="outputFiles"
+			<input type="hidden" name="nb" id="formNb"
+				value="<c:out value="${ uniqueNumber }" />"> <input
+				type="hidden" name="outputFiles"
 				value="<c:out value="${ AnalysisParameters.outputFilesArguments }"/>" />
 
 			<c:if
@@ -56,8 +79,7 @@
 								<c:out value="${ argument.descr }" />
 							</div>
 						</div>
-
-
+						<br />
 					</c:forEach>
 				</c:if>
 
@@ -80,19 +102,18 @@
 								<c:out value="${ argument.descr }" />
 							</div>
 						</div>
+						<br />
 					</c:forEach>
 				</c:if>
 			</c:if>
 
-			<input type="submit" />
-
+			<button type="submit" class="btn btn-primary btn-lg" id="submit-btn"
+				onclick="getAnalysisOutuput()">Submit</button>
 
 		</form>
 
 	</div>
 
+	<script src="js/webFF.js"></script>
 </body>
 </html>
-
-
-

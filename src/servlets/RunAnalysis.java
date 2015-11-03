@@ -21,6 +21,7 @@ import javax.servlet.http.Part;
 
 import controler.AnalysesFinder;
 import controler.FileUpload;
+import controler.ProcessManager;
 import startup.StartupServlet;
 
 /**
@@ -44,8 +45,10 @@ public class RunAnalysis extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+
 	}
 
 	/**
@@ -57,9 +60,12 @@ public class RunAnalysis extends HttpServlet {
 
 		String FILES_PATH = StartupServlet.FILES_PATH;
 		String analysisName = request.getParameter("method");
-		int uniqueNumber = StartupServlet.getUniqueNumber();
+		int uniqueNumber = Integer.parseInt(request.getParameter("nb"));
 		String path = FILES_PATH + analysisName + "_" + uniqueNumber + "/";
 		String outputPath = FILES_PATH + analysisName + "_" + uniqueNumber + "/out/";
+
+		// security key
+		String key = request.getParameter("key");
 
 		createDir(path);
 		createDir(outputPath);
@@ -78,7 +84,8 @@ public class RunAnalysis extends HttpServlet {
 		}
 
 		for (String paramName : request.getParameterMap().keySet()) {
-			if (!paramName.equals("method") && !paramName.equals("outputFiles")) {
+			if (!paramName.equals("method") && !paramName.equals("outputFiles") && !paramName.equals("nb")
+					&& !paramName.equals("key")) {
 				args.add(paramName);
 				args.add(request.getParameter(paramName));
 			}
@@ -109,14 +116,16 @@ public class RunAnalysis extends HttpServlet {
 		List<String> command = new ArrayList<String>();
 		command.add(jvm);
 		command.add("-Djava.library.path=" + libpath);
-		command.add("-Dlog4j.configuration=file://" + getServletContext().getRealPath("/") + "/WEB-INF/log4j.properties");
+		command.add(
+				"-Dlog4j.configuration=file://" + getServletContext().getRealPath("/") + "/WEB-INF/log4j.properties");
 		command.add("-cp");
 		classpath += ":" + getServletContext().getRealPath("/") + "/WEB-INF/lib/flexflux.jar";
 		command.add(classpath);
 		command.add(analysisClass.getName());
 		command.addAll(Arrays.asList(agrsArray));
 		command.add("-web");
-		
+		command.add("-verbose");
+
 		String[] commandArray = new String[command.size()];
 
 		int j = 0;
@@ -124,19 +133,22 @@ public class RunAnalysis extends HttpServlet {
 			commandArray[j] = a;
 			j++;
 		}
-		Process p;
+		Process p = null;
 		ProcessBuilder builder = new ProcessBuilder(commandArray);
 		builder.redirectErrorStream(true);
 		p = builder.start();
-		
-		BufferedReader stdInput = new BufferedReader(new InputStreamReader(
-				p.getInputStream()));
 
-		//read function output
+		ProcessManager.addProcess(uniqueNumber, p, key);
+
+		BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+		// read function output
 		String logContent = "";
 		int line;
 		while ((line = stdInput.read()) != -1) {
-			logContent += (char)line;
+			logContent += (char) line;
+
+			ProcessManager.setProcessOutput(uniqueNumber, logContent.replace(path, ""));
 		}
 		try {
 			p.waitFor();
@@ -144,9 +156,13 @@ public class RunAnalysis extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		logContent=logContent.replace(path, "");
-		
-		
+		logContent = logContent.replace(path, "");
+
+		// if the process was killed
+		if (p.exitValue() == 143) {
+			return;
+		}
+
 		File outputFolder = new File(outputPath);
 		File[] listOfFiles = outputFolder.listFiles();
 
@@ -161,7 +177,7 @@ public class RunAnalysis extends HttpServlet {
 		}
 
 		request.setAttribute("analysisName", analysisName);
-		request.setAttribute("uniqueNumer", uniqueNumber);
+		request.setAttribute("uniqueNumber", uniqueNumber);
 		request.setAttribute("fileNames", fileNames);
 		request.setAttribute("log", logContent);
 

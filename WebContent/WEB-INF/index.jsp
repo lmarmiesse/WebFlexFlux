@@ -23,8 +23,8 @@
 		<ul>
 			<c:forEach items="${ analysesNames }" var="analysisName">
 				<li><a
-					href="<c:url value="${'parameters?method='}${analysisName}"/>"><c:out
-							value="${ analysisName }" /></a>
+					href="<c:url value="${'parameters?method='}${analysisName}"/>"><h4><c:out
+							value="${ analysisName }" /></h4></a>
 
 					<pre class="normal_pre"><c:out value="${ analysesDescriptions[analysisName] }" /></pre></li>
 			</c:forEach>

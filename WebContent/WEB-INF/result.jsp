@@ -34,8 +34,8 @@
 		<p>
 			<c:forEach items="${ fileNames }" var="name">
 				<a
-					href="<c:url value="${'files?method='}${analysisName}${'&nb='}${uniqueNumer}${'&file='}${name}"/>"><c:out
-						value="${ name }" /></a>
+					href="<c:url value="${'files?method='}${analysisName}${'&nb='}${uniqueNumber}${'&file='}${name}"/>"><c:out
+						value="${ name }" /></a><br/>
 			</c:forEach>
 		</p>
 		</c:if>
@@ -47,7 +47,7 @@
 		
 		<c:if test="${log != ''}">
 			<h2>Function output:</h2>
-			<pre id="log"><c:out value="${log}" escapeXml="false" /></pre>
+			<pre id="log" class="function-output"><c:out value="${log}" escapeXml="false" /></pre>
 		</c:if>
 
 

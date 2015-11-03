@@ -18,20 +18,20 @@
       <file-size-threshold>1048576</file-size-threshold>
     </multipart-config>
   </servlet>
-  
   <servlet>
-	<servlet-name>Download</servlet-name>
-	<servlet-class>servlets.Download</servlet-class>
+    <servlet-name>Download</servlet-name>
+    <servlet-class>servlets.Download</servlet-class>
   </servlet>
-  
+  <servlet>
+    <servlet-name>GetFunctionStdOut</servlet-name>
+    <servlet-class>servlets.GetFunctionStdOut</servlet-class>
+  </servlet>
   <servlet>
     <servlet-name>StartupServlet</servlet-name>
     <servlet-class>startup.StartupServlet</servlet-class>
     <load-on-startup>0</load-on-startup>
   </servlet>
-  
-  
-  
+
   <servlet-mapping>
     <servlet-name>AnalysisChoice</servlet-name>
     <url-pattern>/methods</url-pattern>
@@ -45,7 +45,11 @@
     <url-pattern>/result</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-	<servlet-name>Download</servlet-name>
-	<url-pattern>/files</url-pattern>
+    <servlet-name>GetFunctionStdOut</servlet-name>
+    <url-pattern>/getFunctionStdOut</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Download</servlet-name>
+    <url-pattern>/files</url-pattern>
   </servlet-mapping>
 </web-app>

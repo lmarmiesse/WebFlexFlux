@@ -22,9 +22,9 @@ public class GetAnalysisParameters {
 	private List<String> outputFilesArguments = new ArrayList<String>();
 
 	public String getOutputFilesArguments() {
-		
-		return StringUtils.join(outputFilesArguments.toArray(),",");
-		
+
+		return StringUtils.join(outputFilesArguments.toArray(), ",");
+
 	}
 
 	private String analysisName;
@@ -66,8 +66,18 @@ public class GetAnalysisParameters {
 						e.printStackTrace();
 					}
 
-					FormComponent component = getRightFormComponent(option.metaVar(), option.name(), defaultVal,
-							option.usage());
+					String usage = option.usage();
+
+					int startIndex = usage.indexOf("[");
+					int endIndex = usage.indexOf("]");
+					if (startIndex > -1 && endIndex > -1) {
+						
+						String toRemove = usage.substring(startIndex, endIndex+1);
+						
+						usage = usage.replace(toRemove, "");
+					}
+
+					FormComponent component = getRightFormComponent(option.metaVar(), option.name(), defaultVal, usage);
 
 					if (component != null) {
 						if (!f.getType().getName().equals("boolean")) {
