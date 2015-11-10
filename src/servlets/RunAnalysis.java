@@ -130,6 +130,7 @@ public class RunAnalysis extends HttpServlet {
 
 		int j = 0;
 		for (String a : command) {
+			System.out.print(a+" ");
 			commandArray[j] = a;
 			j++;
 		}

@@ -17,6 +17,11 @@ public class AnalysesFinder {
 	private static Map<String, Class<?>> analysesNamesToClasses = new HashMap<String, Class<?>>();
 	private static Map<String, String> analysesNamesToDescirptions = new HashMap<String, String>();
 
+	
+	
+	
+	
+	
 	public static Map<String, String> getAnalysesNamesToDescirptions() {
 		return analysesNamesToDescirptions;
 	}
@@ -30,6 +35,7 @@ public class AnalysesFinder {
 		FlexfluxTest.main(null);
 
 		try {
+			//Maybe to change ...
 			analysesClasses = GraphicalFlexflux.getClasses("flexflux.applications");
 
 		} catch (IOException e) {
