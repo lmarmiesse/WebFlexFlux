@@ -130,7 +130,6 @@ public class RunAnalysis extends HttpServlet {
 
 		int j = 0;
 		for (String a : command) {
-			System.out.print(a+" ");
 			commandArray[j] = a;
 			j++;
 		}
@@ -159,6 +158,9 @@ public class RunAnalysis extends HttpServlet {
 		}
 		logContent = logContent.replace(path, "");
 
+		ProcessManager.setProcessOutput(uniqueNumber, "");
+		
+		
 		// if the process was killed
 		if (p.exitValue() == 143) {
 			return;

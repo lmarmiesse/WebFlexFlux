@@ -20,6 +20,7 @@ public class ProcessManager {
 	public static void addProcess(int index, Process process, String key) {
 		processObject.put(index, process);
 		processKey.put(index, key);
+		processOutput.put(index, "");
 	}
 
 	public static String getProcessOutput(int i) {

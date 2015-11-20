@@ -21,14 +21,10 @@ function getXMLHttpRequest() {
 
 function displayAnalysisOutuput(text) {
 
-	$("#outputDiv").show();
+	
 
 	$("#outputPre").text(text);
 
-	// console.log(text);
-	// setTimeout(function(){
-	// console.log("THIS IS");
-	// }, 2000);
 
 }
 
@@ -40,8 +36,6 @@ function outputRequest(callback) {
 			var response = xhr.responseText;
 			var json = jQuery.parseJSON(response);
 
-			
-			
 			callback(json.output);
 		}
 	};
@@ -82,6 +76,9 @@ function cancelAnalysis() {
 
 
 function getAnalysisOutuput(){
+	
+	$("#outputDiv").show();
+	
 	outputRequest(displayAnalysisOutuput);
 	
 //	update every 200ms

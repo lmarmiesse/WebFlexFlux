@@ -11,6 +11,9 @@ import flexflux.applications.FlexfluxTest;
 public class StartupServlet extends javax.servlet.http.HttpServlet {
 
 	private static AtomicInteger uniqueNumber = new AtomicInteger(0);
+	
+	
+	//Need to find a way not to have to change that every time ... 
 	public static final String FILES_PATH = "/home/lmarmiesse/Documents/uploads/";
 //	public static final String FILES_PATH = "/home/files/";
 	
